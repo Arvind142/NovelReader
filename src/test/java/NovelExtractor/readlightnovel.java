@@ -20,7 +20,9 @@ public class readlightnovel extends CommonMethods {
 	{
 		driver.get(url);
 		List<String> urls=chapterUrls(driver);
-		
+		for(String url:urls) {
+			driver.get(url);
+		}
 	}
 
 	@BeforeMethod
