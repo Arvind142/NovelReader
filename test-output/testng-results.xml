@@ -2,20 +2,20 @@
 <testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="85728" started-at="2020-04-11T16:25:21 IST" finished-at="2020-04-11T16:26:46 IST">
+  <suite name="Default suite" duration-ms="51537" started-at="2020-04-11T16:44:53 IST" finished-at="2020-04-11T16:45:45 IST">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="85728" started-at="2020-04-11T16:25:21 IST" finished-at="2020-04-11T16:26:46 IST">
+    <test name="Default test" duration-ms="51537" started-at="2020-04-11T16:44:53 IST" finished-at="2020-04-11T16:45:45 IST">
       <class name="NovelExtractor.webnovelonline">
-        <test-method status="PASS" signature="beforeMethod()[pri:0, instance:NovelExtractor.webnovelonline@694e1548]" name="beforeMethod" is-config="true" duration-ms="11373" started-at="2020-04-11T16:25:21 IST" finished-at="2020-04-11T16:25:32 IST">
+        <test-method status="PASS" signature="beforeMethod()[pri:0, instance:NovelExtractor.webnovelonline@694e1548]" name="beforeMethod" is-config="true" duration-ms="9486" started-at="2020-04-11T16:44:53 IST" finished-at="2020-04-11T16:45:03 IST">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeMethod -->
-        <test-method status="PASS" signature="f()[pri:0, instance:NovelExtractor.webnovelonline@694e1548]" name="f" duration-ms="69952" started-at="2020-04-11T16:25:32 IST" finished-at="2020-04-11T16:26:42 IST">
+        <test-method status="PASS" signature="f()[pri:0, instance:NovelExtractor.webnovelonline@694e1548]" name="f" duration-ms="34133" started-at="2020-04-11T16:45:03 IST" finished-at="2020-04-11T16:45:37 IST">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- f -->
-        <test-method status="PASS" signature="afterMethod()[pri:0, instance:NovelExtractor.webnovelonline@694e1548]" name="afterMethod" is-config="true" duration-ms="4352" started-at="2020-04-11T16:26:42 IST" finished-at="2020-04-11T16:26:46 IST">
+        <test-method status="PASS" signature="afterMethod()[pri:0, instance:NovelExtractor.webnovelonline@694e1548]" name="afterMethod" is-config="true" duration-ms="7862" started-at="2020-04-11T16:45:37 IST" finished-at="2020-04-11T16:45:45 IST">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterMethod -->

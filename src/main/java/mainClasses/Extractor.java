@@ -36,7 +36,7 @@ public class Extractor extends CommonMethods {
 	public void surf() {
 
 		createDocument("SoloLevelingX");
-		for (Integer i = 1; i <= 3; i++) {
+		for (Integer i = 1; i <= 269; i++) {
 			driver.get(url + String.valueOf(i));
 			writeWord(driver, "webnovelonline");
 		}
