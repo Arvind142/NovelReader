@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.poi.xwpf.usermodel.BreakClear;
 import org.apache.poi.xwpf.usermodel.BreakType;
 import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -22,19 +24,21 @@ public class CommonMethods {
 	XWPFDocument document = null;
 	File wordFile = null;
 	FileOutputStream out = null;
+	boolean firstpage=true;
 
 	/**
-	 * this url will get chapter url for  readlightnovel site 
+	 * this url will get chapter url for readlightnovel site
+	 * 
 	 * @param driver
 	 * @return
 	 * @throws Exception
 	 */
-	public List<String> chapterUrls(WebDriver driver,String siteurl) throws Exception {
+	public List<String> chapterUrls(WebDriver driver, String siteurl) throws Exception {
 		List<String> chapterUrls = new ArrayList<String>();
-		String url ="";
-		File f=new File("Docx/battle-through-the-heavens.txt");
-		if(!f.exists()) {
-			FileWriter write =new FileWriter(f);
+		String url = "";
+		File f = new File("Docx/battle-through-the-heavens.txt");
+		if (!f.exists()) {
+			FileWriter write = new FileWriter(f);
 			driver.get(siteurl);
 			Thread.sleep(10 * 1000);
 			List<WebElement> naviagtor = new ArrayList<WebElement>();
@@ -46,16 +50,15 @@ public class CommonMethods {
 				for (WebElement cpt : chapterList) {
 					url = cpt.findElement(By.tagName("A")).getAttribute("href");
 					chapterUrls.add(url);
-					write.write(url+"\n");
+					write.write(url + "\n");
 					System.out.println(url);
 				}
 			}
 			write.close();
-			
-		}
-		else {
-			BufferedReader reader=new BufferedReader(new FileReader(f));
-			while((url=reader.readLine())!=null) {
+
+		} else {
+			BufferedReader reader = new BufferedReader(new FileReader(f));
+			while ((url = reader.readLine()) != null) {
 				chapterUrls.add(url);
 				System.out.println(url);
 			}
@@ -66,6 +69,7 @@ public class CommonMethods {
 
 	/**
 	 * will be used to write word document
+	 * 
 	 * @param driver
 	 * @param site
 	 * @return
@@ -73,35 +77,37 @@ public class CommonMethods {
 	public boolean writeWord(WebDriver driver, String site) {
 		try {
 			out = new FileOutputStream(wordFile);
-				List<WebElement> paragraphs = null;
-				if(site.contains("readlightnovel")) {
-					paragraphs = driver.findElement(By.xpath("//div[@class=\"chapter-content3\"]/div[@class=\"desc\"]"))
-							.findElements(By.tagName("P"));
-					//removing support line
-					if(paragraphs.get(paragraphs.size()-1).getText().contains("Note : Please download the sponsor's game to support us!")) {
-						paragraphs.remove(paragraphs.size()-1);
-					}
+			List<WebElement> paragraphs = null;
+			if (site.contains("readlightnovel")) {
+				paragraphs = driver.findElement(By.xpath("//div[@class=\"chapter-content3\"]/div[@class=\"desc\"]"))
+						.findElements(By.tagName("P"));
+			} else {
+				paragraphs = driver.findElement(By.className("chapter-content")).findElements(By.tagName("P"));
+			}
+			for (Integer iterator = 0; iterator < paragraphs.size(); iterator++) {
+				if(paragraphs.get(iterator).getText().trim().equals("")) {
+					continue;
 				}
-				else {
-					paragraphs = driver.findElement(By.className("chapter-content"))
-							.findElements(By.tagName("P"));
-				}
-				for (Integer iterator = 0; iterator < paragraphs.size(); iterator++) {
-					XWPFParagraph paragraph = document.createParagraph();
-					XWPFRun run = paragraph.createRun();
-					if (iterator == 0) {
-						run.setBold(true);
-						run.setUnderline(UnderlinePatterns.SINGLE);
-						run.setText(paragraphs.get(iterator).getText());
-					} else {
-						run.setBold(false);
-						run.setText(paragraphs.get(iterator).getText());
-					}					if (iterator == (paragraphs.size() - 1)) {
+				XWPFParagraph paragraph = document.createParagraph();
+				XWPFRun run = paragraph.createRun();
+				if (iterator == 0) {
+					if(firstpage==false) {
 						run.addBreak(BreakType.PAGE);
 					}
+					firstpage=false;
+					run.setBold(true);
+					run.setUnderline(UnderlinePatterns.SINGLE);
+					run.setText(paragraphs.get(iterator).getText());
+				} else {
+					run.setBold(false);
+					run.setText(paragraphs.get(iterator).getText());
 				}
-				document.write(out);
-				out.close();
+				if (iterator == (paragraphs.size() - 1)) {
+					run.addBreak(BreakType.PAGE);
+				}
+			}
+			document.write(out);
+			out.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,12 +117,13 @@ public class CommonMethods {
 
 	/**
 	 * create word doc @ runtime
+	 * 
 	 * @param name
 	 * @return
 	 */
 	public boolean createDocument(String name) {
 		try {
-			wordFile = new File("Docx/"+name + ".docx");
+			wordFile = new File("Docx/" + name + ".docx");
 			document = new XWPFDocument();
 			return true;
 		} catch (Exception e) {
@@ -127,6 +134,7 @@ public class CommonMethods {
 
 	/**
 	 * closing word document
+	 * 
 	 * @return
 	 */
 	public boolean closeDocument() {

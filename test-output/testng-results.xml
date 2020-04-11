@@ -2,20 +2,20 @@
 <testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="74364" started-at="2020-04-11T17:48:15 IST" finished-at="2020-04-11T17:49:29 IST">
+  <suite name="Default suite" duration-ms="96023" started-at="2020-04-11T19:00:50 IST" finished-at="2020-04-11T19:02:27 IST">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="74364" started-at="2020-04-11T17:48:15 IST" finished-at="2020-04-11T17:49:29 IST">
+    <test name="Default test" duration-ms="96023" started-at="2020-04-11T19:00:50 IST" finished-at="2020-04-11T19:02:27 IST">
       <class name="NovelExtractor.readlightnovel">
-        <test-method status="PASS" signature="beforeMethod()[pri:0, instance:NovelExtractor.readlightnovel@694e1548]" name="beforeMethod" is-config="true" duration-ms="23448" started-at="2020-04-11T17:48:15 IST" finished-at="2020-04-11T17:48:39 IST">
+        <test-method status="PASS" signature="beforeMethod()[pri:0, instance:NovelExtractor.readlightnovel@694e1548]" name="beforeMethod" is-config="true" duration-ms="31178" started-at="2020-04-11T19:00:51 IST" finished-at="2020-04-11T19:01:22 IST">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeMethod -->
-        <test-method status="PASS" signature="f()[pri:0, instance:NovelExtractor.readlightnovel@694e1548]" name="f" duration-ms="41879" started-at="2020-04-11T17:48:39 IST" finished-at="2020-04-11T17:49:20 IST">
+        <test-method status="PASS" signature="f()[pri:0, instance:NovelExtractor.readlightnovel@694e1548]" name="f" duration-ms="50152" started-at="2020-04-11T19:01:22 IST" finished-at="2020-04-11T19:02:12 IST">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- f -->
-        <test-method status="PASS" signature="afterMethod()[pri:0, instance:NovelExtractor.readlightnovel@694e1548]" name="afterMethod" is-config="true" duration-ms="8974" started-at="2020-04-11T17:49:21 IST" finished-at="2020-04-11T17:49:29 IST">
+        <test-method status="PASS" signature="afterMethod()[pri:0, instance:NovelExtractor.readlightnovel@694e1548]" name="afterMethod" is-config="true" duration-ms="14622" started-at="2020-04-11T19:02:12 IST" finished-at="2020-04-11T19:02:27 IST">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterMethod -->
