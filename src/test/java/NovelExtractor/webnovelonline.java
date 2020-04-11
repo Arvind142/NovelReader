@@ -16,7 +16,7 @@ public class webnovelonline extends CommonMethods {
 	@Test
 	public void f() throws Exception {
 		createDocument("SoloLevelingX");
-		for (Integer i = 1; i <= 3; i++) {
+		for (Integer i = 1; i <= 269; i++) {
 			driver.get(url + String.valueOf(i));
 			writeWord(driver, "webnovelonline");
 		}

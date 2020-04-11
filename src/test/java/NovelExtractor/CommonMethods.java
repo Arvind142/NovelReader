@@ -73,7 +73,7 @@ public class CommonMethods {
 
 	public boolean createDocument(String name) {
 		try {
-			wordFile = new File(name + ".docx");
+			wordFile = new File("target/Docx/"+name + ".docx");
 			document = new XWPFDocument();
 			return true;
 		} catch (Exception e) {
