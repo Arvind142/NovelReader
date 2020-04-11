@@ -1,7 +1,10 @@
 package NovelExtractor;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.poi.xwpf.usermodel.BreakType;
@@ -20,29 +23,69 @@ public class CommonMethods {
 	File wordFile = null;
 	FileOutputStream out = null;
 
-	public List<String> chapterUrls(WebDriver driver) throws Exception {
-		Thread.sleep(10 * 1000);
-		List<WebElement> naviagtor = new ArrayList<WebElement>();
-		List<WebElement> chapterList = new ArrayList<WebElement>();
+	/**
+	 * this url will get chapter url for  readlightnovel site 
+	 * @param driver
+	 * @return
+	 * @throws Exception
+	 */
+	public List<String> chapterUrls(WebDriver driver,String siteurl) throws Exception {
 		List<String> chapterUrls = new ArrayList<String>();
-		naviagtor = driver.findElement(By.xpath("//*[@id=\"collapse-1\"]/div/div")).findElements(By.tagName("div"));
-		for (Integer i = 0; i < naviagtor.size(); i++) {
-			WebElement e = naviagtor.get(i);
-			chapterList = e.findElement(By.tagName("UL")).findElements(By.tagName("li"));
-			for (WebElement cpt : chapterList) {
-				String url = cpt.findElement(By.tagName("A")).getAttribute("href");
-				chapterUrls.add(url);
+		String url ="";
+		File f=new File("Docx/battle-through-the-heavens.txt");
+		if(!f.exists()) {
+			FileWriter write =new FileWriter(f);
+			driver.get(siteurl);
+			Thread.sleep(10 * 1000);
+			List<WebElement> naviagtor = new ArrayList<WebElement>();
+			List<WebElement> chapterList = new ArrayList<WebElement>();
+			naviagtor = driver.findElement(By.xpath("//*[@id=\"collapse-1\"]/div/div")).findElements(By.tagName("div"));
+			for (Integer i = 0; i < naviagtor.size(); i++) {
+				WebElement e = naviagtor.get(i);
+				chapterList = e.findElement(By.tagName("UL")).findElements(By.tagName("li"));
+				for (WebElement cpt : chapterList) {
+					url = cpt.findElement(By.tagName("A")).getAttribute("href");
+					chapterUrls.add(url);
+					write.write(url+"\n");
+					System.out.println(url);
+				}
 			}
+			write.close();
+			
+		}
+		else {
+			BufferedReader reader=new BufferedReader(new FileReader(f));
+			while((url=reader.readLine())!=null) {
+				chapterUrls.add(url);
+				System.out.println(url);
+			}
+			reader.close();
 		}
 		return chapterUrls;
 	}
 
+	/**
+	 * will be used to write word document
+	 * @param driver
+	 * @param site
+	 * @return
+	 */
 	public boolean writeWord(WebDriver driver, String site) {
 		try {
 			out = new FileOutputStream(wordFile);
-			if (site.equals("webnovelonline")) {
-				List<WebElement> paragraphs = driver.findElement(By.className("chapter-content"))
-						.findElements(By.tagName("P"));
+				List<WebElement> paragraphs = null;
+				if(site.contains("readlightnovel")) {
+					paragraphs = driver.findElement(By.xpath("//div[@class=\"chapter-content3\"]/div[@class=\"desc\"]"))
+							.findElements(By.tagName("P"));
+					//removing support line
+					if(paragraphs.get(paragraphs.size()-1).getText().contains("Note : Please download the sponsor's game to support us!")) {
+						paragraphs.remove(paragraphs.size()-1);
+					}
+				}
+				else {
+					paragraphs = driver.findElement(By.className("chapter-content"))
+							.findElements(By.tagName("P"));
+				}
 				for (Integer iterator = 0; iterator < paragraphs.size(); iterator++) {
 					XWPFParagraph paragraph = document.createParagraph();
 					XWPFRun run = paragraph.createRun();
@@ -53,17 +96,12 @@ public class CommonMethods {
 					} else {
 						run.setBold(false);
 						run.setText(paragraphs.get(iterator).getText());
-					}
-					if (iterator == (paragraphs.size() - 1)) {
+					}					if (iterator == (paragraphs.size() - 1)) {
 						run.addBreak(BreakType.PAGE);
 					}
 				}
 				document.write(out);
 				out.close();
-			} else {
-				System.out.println("defined to defaultBlock");
-			}
-
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,6 +109,11 @@ public class CommonMethods {
 		}
 	}
 
+	/**
+	 * create word doc @ runtime
+	 * @param name
+	 * @return
+	 */
 	public boolean createDocument(String name) {
 		try {
 			wordFile = new File("Docx/"+name + ".docx");
@@ -82,6 +125,10 @@ public class CommonMethods {
 		}
 	}
 
+	/**
+	 * closing word document
+	 * @return
+	 */
 	public boolean closeDocument() {
 		try {
 			document.close();
