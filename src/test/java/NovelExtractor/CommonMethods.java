@@ -134,7 +134,7 @@ public class CommonMethods {
 
 	/**
 	 * closing word document
-	 * 
+	 *  
 	 * @return
 	 */
 	public boolean closeDocument() {
