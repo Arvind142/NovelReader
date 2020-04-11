@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.poi.xwpf.usermodel.BreakClear;
 import org.apache.poi.xwpf.usermodel.BreakType;
 import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -33,10 +31,10 @@ public class CommonMethods {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<String> chapterUrls(WebDriver driver, String siteurl) throws Exception {
+	public List<String> chapterUrls(WebDriver driver, String siteurl,String doc) throws Exception {
 		List<String> chapterUrls = new ArrayList<String>();
 		String url = "";
-		File f = new File("Docx/battle-through-the-heavens.txt");
+		File f = new File("Docx/"+doc+".txt");
 		if (!f.exists()) {
 			FileWriter write = new FileWriter(f);
 			driver.get(siteurl);
@@ -49,9 +47,11 @@ public class CommonMethods {
 				chapterList = e.findElement(By.tagName("UL")).findElements(By.tagName("li"));
 				for (WebElement cpt : chapterList) {
 					url = cpt.findElement(By.tagName("A")).getAttribute("href");
-					chapterUrls.add(url);
-					write.write(url + "\n");
-					System.out.println(url);
+					if(url.matches("(https://www.readlightnovel.org/).*(/chapter-).+")) {
+						chapterUrls.add(url);
+						write.write(url + "\n");
+						System.out.println(url);
+					}
 				}
 			}
 			write.close();
@@ -90,7 +90,7 @@ public class CommonMethods {
 				}
 				XWPFParagraph paragraph = document.createParagraph();
 				XWPFRun run = paragraph.createRun();
-				if (iterator == 0) {
+				if (iterator == 0 || paragraphs.get(iterator).getText().matches("(C|c)(hapter ).+")) {
 					if(firstpage==false) {
 						run.addBreak(BreakType.PAGE);
 					}

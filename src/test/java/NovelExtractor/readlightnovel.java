@@ -13,15 +13,17 @@ import NovelExtractor.CommonMethods;
 
 public class readlightnovel extends CommonMethods {
 	WebDriver driver = null;
-	String url = "https://www.readlightnovel.org/battle-through-the-heavens/";
+	String url = "https://www.readlightnovel.org/a-returners-magic-should-be-special";
 
 	@Test
 	public void f() throws Exception {
-		createDocument("battle-through-the-heavens");
-		List<String> urls = chapterUrls(driver,url);
-//		for (String url : urls) {
-		for(int i=0;i<3;i++) {
-			driver.get(urls.get(i));
+		String novelName=url.split("/")[url.split("/").length-1];
+		createDocument(novelName);
+		List<String> urls = chapterUrls(driver,url,novelName);
+		for (String url : urls) {
+//		for(int i=0;i<3;i++) {
+//			driver.get(urls.get(i));
+			driver.get(url);
 			writeWord(driver, url);
 		}
 		closeDocument();
