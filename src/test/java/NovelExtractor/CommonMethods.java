@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.BreakType;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -22,7 +24,7 @@ public class CommonMethods {
 	XWPFDocument document = null;
 	File wordFile = null;
 	FileOutputStream out = null;
-	boolean firstpage=true;
+	boolean firstpage = true;
 
 	/**
 	 * this url will get chapter url for readlightnovel site
@@ -31,10 +33,10 @@ public class CommonMethods {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<String> chapterUrls(WebDriver driver, String siteurl,String doc) throws Exception {
+	public List<String> chapterUrls(WebDriver driver, String siteurl, String doc) throws Exception {
 		List<String> chapterUrls = new ArrayList<String>();
 		String url = "";
-		File f = new File("Docx/"+doc+".txt");
+		File f = new File("Docx/" + doc + ".txt");
 		if (!f.exists()) {
 			FileWriter write = new FileWriter(f);
 			driver.get(siteurl);
@@ -47,7 +49,7 @@ public class CommonMethods {
 				chapterList = e.findElement(By.tagName("UL")).findElements(By.tagName("li"));
 				for (WebElement cpt : chapterList) {
 					url = cpt.findElement(By.tagName("A")).getAttribute("href");
-					if(url.matches("(https://www.readlightnovel.org/).*(/chapter-).+")) {
+					if (url.matches("(https://www.readlightnovel.org/).*(/chapter-).+")) {
 						chapterUrls.add(url);
 						write.write(url + "\n");
 						System.out.println(url);
@@ -85,22 +87,38 @@ public class CommonMethods {
 				paragraphs = driver.findElement(By.className("chapter-content")).findElements(By.tagName("P"));
 			}
 			for (Integer iterator = 0; iterator < paragraphs.size(); iterator++) {
-				if(paragraphs.get(iterator).getText().trim().equals("")) {
+				if (paragraphs.get(iterator).getText().trim().equals("")) {
 					continue;
 				}
 				XWPFParagraph paragraph = document.createParagraph();
 				XWPFRun run = paragraph.createRun();
 				if (iterator == 0 || paragraphs.get(iterator).getText().matches("(C|c)(hapter ).+")) {
-					if(firstpage==false) {
+					if (firstpage == true) {
+						run.setBold(true);
+						run.setUnderline(UnderlinePatterns.SINGLE);
+						paragraph.setAlignment(ParagraphAlignment.CENTER);
+						run.setFontSize(28);
+						run.setFontFamily("Baskerville Old Face");
+						run.setText(StringUtils.capitalize((site.split("/")[site.split("/").length - 1].replaceAll("-", " ").contains("chapter")?site.split("/")[site.split("/").length - 2].replaceAll("-", " "):site.split("/")[site.split("/").length - 1].replaceAll("-", " "))));
+						run.addBreak();
+						document.write(out);
+						out.close();
+						out = new FileOutputStream(wordFile);
+						paragraph = document.createParagraph();
+						run = paragraph.createRun();
+					} else {
 						run.addBreak(BreakType.PAGE);
 					}
-					firstpage=false;
 					run.setBold(true);
 					run.setUnderline(UnderlinePatterns.SINGLE);
+					run.setFontSize(11);
+					paragraph.setAlignment(ParagraphAlignment.LEFT);
+					run.setFontFamily("Calibri (Body)");
 					run.setText(paragraphs.get(iterator).getText());
+					firstpage = false;
 				} else {
 					run.setBold(false);
-					run.setText(paragraphs.get(iterator).getText());
+					run.setText(paragraphs.get(iterator).getText().replaceAll(" [.\"]",".\"").replaceAll(" [.]","."));
 				}
 				if (iterator == (paragraphs.size() - 1)) {
 					run.addBreak(BreakType.PAGE);
@@ -140,6 +158,7 @@ public class CommonMethods {
 	public boolean closeDocument() {
 		try {
 			document.close();
+
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
